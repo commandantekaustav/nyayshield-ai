@@ -32,14 +32,14 @@ def get_github_collaboration():
     }
 
     try:
-        req = urllib.request.Request(f"https://github.com{repo}/pulls?state=all&per_page=100", headers=headers)
+        req = urllib.request.Request(f"https://api.github.com/repos/{repo}/pulls?state=all&per_page=100", headers=headers)
         with urllib.request.urlopen(req) as resp:
             pulls = json.loads(resp.read().decode())
             for pr in pulls:
                 user = pr['user']['login']
                 collab[user]['prs_opened'] += 1
                 
-                rev_req = urllib.request.Request(f"https://github.com{repo}/pulls/{pr['number']}/reviews", headers=headers)
+                rev_req = urllib.request.Request(f"https://api.github.com/repos/{repo}/pulls/{pr['number']}/reviews", headers=headers)
                 with urllib.request.urlopen(rev_req) as rev_resp:
                     reviews = json.loads(rev_resp.read().decode())
                     for r in reviews:
