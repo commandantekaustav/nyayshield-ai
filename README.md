@@ -1,7 +1,10 @@
 # Post Hackathon Self-Evaluations
 ## 📊 Team Contributions
 <!-- CONTRIB_START -->
-
+### 🏆 Comprehensive Project Contributions
+| Contributor | Commits | Core Code Added | Docs & Config | Refactored (Del) | Active Files | Final Code Ownership |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Kaustav Basu** | 18 | +8,371 | +2,081 | -1,470 | 78 | **100.0%** |
 <!-- CONTRIB_END -->
 
 

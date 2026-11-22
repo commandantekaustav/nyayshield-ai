@@ -7,7 +7,14 @@ import urllib.request
 
 IGNORE_EXTS = {'.lock', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.pdf', '.ico', '.woff', '.ttf'}
 IGNORE_FILES = {'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml'}
+AUTHOR_MAP = {
+    'vangaja rakshasha': 'Kaustav Basu',
+}
 DOC_EXTS = {'.md', '.txt', '.rst', '.json', '.yml', '.yaml'}
+
+def normalize_author(author_name):
+    author_name = author_name.strip()
+    return AUTHOR_MAP.get(author_name, author_name)
 
 def run_git(args):
     result = subprocess.run(['git'] + args, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, errors='ignore')
@@ -61,7 +68,8 @@ def analyze_repo():
 
     for line in log_output.splitlines():
         if line.startswith('COMMIT_START|'):
-            current_author = line.split('|', 1).strip()
+            raw_author = line.split('|', 1)[1].strip()
+            current_author = normalize_author(raw_author)
             stats[current_author]['commits'] += 1
         elif line and current_author and '\t' in line:
             parts = line.split('\t')
@@ -87,7 +95,7 @@ def analyze_repo():
         blame_output = run_git(['blame', '--line-porcelain', filepath])
         for line in blame_output.splitlines():
             if line.startswith('author '):
-                author = line[7:].strip()
+                author = normalize_author(line[7:])
                 if author in stats:
                     stats[author]['surviving_lines'] += 1
 
