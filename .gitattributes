@@ -1,0 +1,2 @@
+# Encrypted research logs (ZSTD + ChaCha20-Poly1305)
+*.enc.json binary

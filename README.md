@@ -693,6 +693,18 @@ flowchart TD
 
 ---
 
+## 🧪 Research & Peer-Review Swarm Factory (`peer-review-factory`)
+An offline-first, token-minimalist multi-agent academic peer-review and self-evolution workspace lives under [`research/`](research/):
+- **3-Agent Pipeline** (`research/skills/peer_review_pipeline/`): *Domain Skeptic*, *Forensic Methodologist*, and *Gatekeeper Editor* operating at low temperature (`0.1`–`0.2`) with strict telegraphic word caps (`< 300` / `< 150` words).
+- **Local Vector Memory** (`vector_store.py`): Embedded LanceDB (`research/reviewer_brain`, table `wisdom`) with 384-dim offline embeddings and cosine deduplication (`>= 0.92`) to gate external searches.
+- **Targeted Search Fallback** (`research/skills/novelty_search/`): Free-tier Semantic Scholar Graph API + arXiv Atom fallback (max 2 queries per run, compact metadata only).
+- **Encrypted Logs** (`encrypt_util.py`): All `review_log.enc.json` files are compressed with **Zstandard (level 3)** and authenticated-encrypted with **ChaCha20-Poly1305** via `IDEA_ENC_KEY`.
+- **Bounded Genetic Evolution** (`mutator.py`): AST-validated micro-mutations capped strictly at **≤ 1.0% of lines per generation** with weighted fitness scoring (`0.6*risk_reduction + 0.3*tokens_saved - 0.1*runtime_increase`) and `pre-gen-<NN>` Git tags.
+- **Interactive Paper Generator** (`research/skills/paper_generator/`): Section-by-section `accept`/`edit`/`redo` CLI with Markdown and LaTeX (`.tex`) export.
+- **On-Commit Trigger**: Install via `bash research/scripts/schedule_on_commit.sh` to auto-audit changed `research/ideas/**/manuscript.md` files.
+
+---
+
 ## 👥 Contributors & Branch Organization
 - **Kaustav Basu** ([@commandantekaustav](https://github.com/commandantekaustav)) — Core Multimodal AI, Vertex AI Vision Pipeline, Cloud Run/Firebase Deployment, Cryptography & Statutory Engine.
 - **Ishika** — Core Optical Defect Detection Prototype (refactored & integrated into `backend/services/vision/` and `AnnotationCanvas.tsx`).

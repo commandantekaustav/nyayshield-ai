@@ -1,0 +1,7 @@
+# Local LanceDB vector store & runtime caches
+reviewer_brain/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+*.tmp
