@@ -2,9 +2,13 @@
 ## 📊 Team Contributions
 <!-- CONTRIB_START -->
 ### 🏆 Comprehensive Project Contributions
-| Contributor | Commits | Core Code Added | Docs & Config | Refactored (Del) | Active Files | Final Code Ownership |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Kaustav Basu** | 18 | +8,371 | +2,081 | -1,470 | 78 | **100.0%** |
+| Contributor | Role & Contributed Scope | Git Commits | Core Code Added | Docs & Config | Refactored (Del) | Active Files | Final Code Ownership |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Kaustav Basu** | Lead Architect — Full-Stack FastAPI/React, Vertex AI Pipeline, Production Refactoring, Crypto Vault, Legal Critic & GCP Deployment | 19 | +7,972 | +2,085 | -1,473 | 75 | **94.1%** |
+| **Ishika** | Optical Defect Detection Prototype (Core Detection Logic in `services/vision/` & `AnnotationCanvas.tsx`, delivered offline via `.zip`) | — *(ported by Kaustav)* | +409 | — | — | 3 | **5.9%** |
+| **Anwesha** | Pitch Deck & Presentation Slides *(Non-Code)* | — | — | — | — | — | **Slide Deck** |
+
+> *Methodology & mathematical formulas governing code ownership, offline prototype porting, and future scoring are documented in [`team/boardroom/CONTRIBUTION_METHODOLOGY.md`](team/boardroom/CONTRIBUTION_METHODOLOGY.md).*
 <!-- CONTRIB_END -->
 
 
@@ -664,7 +668,7 @@ flowchart TD
 
 ## 👥 Contributors & Branch Organization
 - **Kaustav Basu** ([@commandantekaustav](https://github.com/commandantekaustav)) — Core Multimodal AI, Vertex AI Vision Pipeline, Cloud Run/Firebase Deployment, Cryptography & Statutory Engine.
-- **Anwesha** (`feat/b1-claims-enhancement`) — B1 Enterprise Claims & UI Dashboards.
-- **Ishika** (`test/ishika-hardware-eval`) — Hardware Defect Evaluation & Alpha Testing.
+- **Ishika** — Core Optical Defect Detection Prototype (refactored & integrated into `backend/services/vision/` and `AnnotationCanvas.tsx`).
+- **Anwesha** — Pitch Deck & Presentation Slides.
 
 *Built with ❤️ for Google Startup Buildathon India 2026.*
