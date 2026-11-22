@@ -11,6 +11,7 @@ import base64
 import json
 import os
 import zlib
+from pathlib import Path
 from typing import Any
 
 try:
@@ -33,7 +34,32 @@ def generate_key() -> str:
     return base64.urlsafe_b64encode(os.urandom(32)).decode("ascii")
 
 
+def load_dotenv_if_present(env_paths: tuple[Path, ...] | None = None) -> dict[str, str]:
+    """Load KEY=VALUE pairs from repo-root or research `.env` without overriding os.environ."""
+    loaded: dict[str, str] = {}
+    if env_paths is None:
+        repo_root = Path(__file__).resolve().parents[3]
+        env_paths = (repo_root / ".env", repo_root / "research" / ".env")
+
+    for path in env_paths:
+        if not path.is_file():
+            continue
+        for raw_line in path.read_text(encoding="utf-8").splitlines():
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key_name, val = line.split("=", 1)
+            key_name = key_name.strip()
+            val = val.strip().strip('"').strip("'")
+            if key_name and key_name not in os.environ and val:
+                os.environ[key_name] = val
+                loaded[key_name] = val
+    return loaded
+
+
 def _resolve_key(key: bytes | str | None = None) -> bytes:
+    if key is None:
+        load_dotenv_if_present()
     raw_key = key if key is not None else os.getenv("IDEA_ENC_KEY")
     if not raw_key:
         raise ValueError(

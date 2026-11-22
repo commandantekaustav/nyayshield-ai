@@ -137,6 +137,7 @@ def process_paper(
     allow_search: bool = False,
     run_evolution: bool = True,
     apply_evolution: bool = False,
+    output_log_path: str | Path | None = None,
 ) -> dict[str, Any]:
     """Execute the full peer-review pipeline on ``paper_path``."""
     t0 = time.perf_counter()
@@ -194,7 +195,8 @@ def process_paper(
         "evolution": evolution_report,
     }
 
-    enc_path = paper.parent / "review_log.enc.json"
+    enc_path = Path(output_log_path) if output_log_path is not None else (paper.parent / "review_log.enc.json")
+    enc_path.parent.mkdir(parents=True, exist_ok=True)
     enc_blob = compress_encrypt(log_payload, key=enc_key)
     enc_path.write_bytes(enc_blob)
     log_payload["encrypted_log_path"] = str(enc_path)

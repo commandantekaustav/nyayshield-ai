@@ -1,4 +1,5 @@
 # Local LanceDB vector store & runtime caches
+.env
 reviewer_brain/
 __pycache__/
 *.pyc
