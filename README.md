@@ -1,3 +1,10 @@
+# Post Hackathon Self-Evaluations
+## 📊 Team Contributions
+<!-- CONTRIB_START -->
+
+<!-- CONTRIB_END -->
+
+
 # 🛡️ NyayShield AI — Autonomous Consumer Warranty Defense Engine
 ### *Countering Customer-Induced Damage (CID) Pretexts & Unlawful Repair Price-Gouging via Google Multimodal AI*
 
