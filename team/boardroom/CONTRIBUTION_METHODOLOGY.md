@@ -74,7 +74,7 @@ $$I_i = 60 \cdot S_i + 30 \cdot C_i + 100 \cdot D_i$$
 ### 3.5 Future Pull Request & Peer Review Index ($R_i$)
 When executed with GitHub API access (`GITHUB_TOKEN` + `GITHUB_REPOSITORY`), `scripts/update_readme.py` also tracks collaborative review health:
 
-$$R_i = N^{\text{reviews\_given}}_i + N^{\text{prs\_opened}}_i$$
+$$R_i = N^{\text{reviews-given}}_i + N^{\text{prs-opened}}_i$$
 
 Self-reviews are strictly excluded (`reviewer != pr_author`), aligning with empirical findings on the defect-prevention value of independent peer review (*Bacchelli & Bird, ICSE 2013* [6]).
 
