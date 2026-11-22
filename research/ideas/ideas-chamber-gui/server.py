@@ -192,9 +192,11 @@ def build_workspace_snapshot(
     review_data = _read_reviews(research_root, enc_key=enc_key)
     wisdom = _read_wisdom(research_root)
     cognitive = summarize_cognitive_evolution(
+        repo_root=REPO_ROOT,
         log_path=cognitive_log_path,
         review_metrics=review_data["reviews"],
         wisdom_count=len(wisdom),
+        ideas_count=len(ideas),
     )
 
     return {

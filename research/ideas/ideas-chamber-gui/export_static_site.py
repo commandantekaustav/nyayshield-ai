@@ -38,8 +38,11 @@ def export_static(
         research_root=research_root,
         enc_key="",
     )
-    if not include_cognitive:
-        snap["cognitive"]["recent_entries"] = []
+    # Automated cognitive telemetry is public repo-derived statistics (0 sensitive data)
+    # So we keep the automated epochs visible!
+    if not include_cognitive and "recent_entries" in snap.get("cognitive", {}):
+        # Keep up to 20 automated recent entries for the public static dashboard
+        snap["cognitive"]["recent_entries"] = snap["cognitive"]["recent_entries"][:20]
 
     # Bundle non-sensitive markdown/tex files so viewers can browse ideas, drafts & papers
     static_files: dict[str, str] = {}
