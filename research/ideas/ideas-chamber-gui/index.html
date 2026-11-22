@@ -216,12 +216,42 @@
 
 <script>
 let DATA = null;
+let STATIC_MODE = false;
+const LS_KEY = "hismasterschamber_cognitive_log_v1";
 
 function toast(msg) {
   const el = document.getElementById("toast");
   el.textContent = msg;
   el.style.display = "block";
   setTimeout(() => { el.style.display = "none"; }, 3500);
+}
+
+function computeClientOLS(values) {
+  const n = values.length;
+  if (n === 0) return { count: 0, latest: null, mean: null, delta: 0, slope: 0, status: "BASELINE", series: [] };
+  const mean = values.reduce((a, b) => a + b, 0) / n;
+  const latest = values[n - 1];
+  if (n === 1) return { count: 1, latest: +latest.toFixed(2), mean: +mean.toFixed(2), delta: 0, slope: 0, status: "BASELINE", series: values };
+  const meanX = (n - 1) / 2;
+  let num = 0, den = 0;
+  for (let i = 0; i < n; i++) { num += (i - meanX) * (values[i] - mean); den += (i - meanX) ** 2; }
+  const slope = den > 0 ? num / den : 0;
+  const delta = latest - values[0];
+  const status = slope > 0.05 ? "INCLINING" : slope < -0.05 ? "DECLINING" : "STABLE";
+  return { count: n, latest: +latest.toFixed(2), mean: +mean.toFixed(2), delta: +delta.toFixed(2), slope: +slope.toFixed(4), status, series: values.slice(-30) };
+}
+
+function hydrateStaticCognitive(data) {
+  const saved = JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+  if (!saved.length) return data;
+  const abilities = ["intelligence", "memory", "focus", "creativity", "reasoning", "energy"];
+  const abTrends = {};
+  for (const a of abilities) abTrends[a] = computeClientOLS(saved.map(e => e.scores[a]));
+  data.cognitive.total_checkins = saved.length;
+  data.cognitive.overall = computeClientOLS(saved.map(e => e.composite));
+  data.cognitive.abilities = abTrends;
+  data.cognitive.recent_entries = [...saved].reverse().slice(0, 20);
+  return data;
 }
 
 function badgeHTML(status) {
@@ -247,8 +277,16 @@ function sparklineSVG(series, status) {
 }
 
 async function refreshAll() {
-  const res = await fetch("/api/overview");
-  DATA = await res.json();
+  try {
+    const res = await fetch("/api/overview");
+    if (!res.ok) throw new Error("API unavailable");
+    DATA = await res.json();
+    STATIC_MODE = false;
+  } catch {
+    const res = await fetch("./data.json");
+    DATA = hydrateStaticCognitive(await res.json());
+    STATIC_MODE = true;
+  }
   renderAll();
 }
 
@@ -362,9 +400,14 @@ function renderWisdom() {
 }
 
 async function openFile(scope, relpath, viewerId) {
+  document.getElementById(viewerId + "-title").textContent = `${scope}/${relpath}`;
+  if (STATIC_MODE && DATA && DATA.static_files) {
+    const key = `${scope}/${relpath}`;
+    document.getElementById(viewerId).textContent = DATA.static_files[key] || "[File not included in static snapshot]";
+    return;
+  }
   const res = await fetch(`/api/file?scope=${encodeURIComponent(scope)}&path=${encodeURIComponent(relpath)}`);
   const d = await res.json();
-  document.getElementById(viewerId + "-title").textContent = `${scope}/${relpath}`;
   document.getElementById(viewerId).textContent = d.error ? `[ERROR] ${d.error}` : d.content;
 }
 
@@ -375,10 +418,22 @@ async function submitCheckin(ev) {
   for (const k of ["intelligence","memory","focus","creativity","reasoning","energy"]) {
     scores[k] = parseFloat(fd.get(k));
   }
+  const note = (fd.get("note") || "").trim();
+  if (STATIC_MODE) {
+    const saved = JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+    const vals = Object.values(scores);
+    const composite = +((vals.reduce((a, b) => a + b, 0) / vals.length) * 10).toFixed(2);
+    saved.push({ timestamp: new Date().toISOString(), scores, composite, note });
+    localStorage.setItem(LS_KEY, JSON.stringify(saved));
+    ev.target.note.value = "";
+    toast("Saved check-in to browser localStorage & recomputed trends.");
+    await refreshAll();
+    return;
+  }
   const res = await fetch("/api/cognitive/log", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ scores, note: fd.get("note") || "" }),
+    body: JSON.stringify({ scores, note }),
   });
   const d = await res.json();
   if (!res.ok) { toast(d.error || "Failed to save check-in"); return; }
@@ -388,6 +443,10 @@ async function submitCheckin(ev) {
 }
 
 async function runAudit() {
+  if (STATIC_MODE) {
+    toast("Static GitHub Pages snapshot — run locally via server.py to execute live peer-review audits.");
+    return;
+  }
   toast("Running sibling peer-review audit...");
   const res = await fetch("/api/audit/run", {
     method: "POST",

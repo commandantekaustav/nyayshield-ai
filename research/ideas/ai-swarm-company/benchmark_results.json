@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-11-22T20:20:56.900066+00:00",
+  "n": 36,
+  "seed": 42,
+  "environment": {
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26300-SP0"
+  },
+  "token_reduction_pct": {
+    "mean": 55.047,
+    "sd": 14.444,
+    "ci95_low": 50.16,
+    "ci95_high": 59.934
+  },
+  "paired_t_test_tokens_vs_baseline_a": {
+    "t_stat": 16.62,
+    "p_value": 0.0
+  },
+  "word_cap_compliance_pct": 100.0,
+  "ablations": {
+    "baseline_a_unstripped_no_memory": {
+      "tokens": {
+        "mean": 357.694,
+        "sd": 85.62,
+        "ci95_low": 328.725,
+        "ci95_high": 386.664
+      },
+      "latency_ms": {
+        "mean": 0.444,
+        "sd": 0.209,
+        "ci95_low": 0.373,
+        "ci95_high": 0.514
+      },
+      "external_search_triggers": 4
+    },
+    "baseline_b_strip_only": {
+      "tokens": {
+        "mean": 163.111,
+        "sd": 88.871,
+        "ci95_low": 133.042,
+        "ci95_high": 193.18
+      },
+      "latency_ms": {
+        "mean": 1.066,
+        "sd": 0.397,
+        "ci95_low": 0.932,
+        "ci95_high": 1.201
+      },
+      "external_search_triggers": 4
+    },
+    "full_swarm_ai_swarm_company": {
+      "tokens": {
+        "mean": 163.111,
+        "sd": 88.871,
+        "ci95_low": 133.042,
+        "ci95_high": 193.18
+      },
+      "latency_ms": {
+        "mean": 6.603,
+        "sd": 5.837,
+        "ci95_low": 4.628,
+        "ci95_high": 8.578
+      },
+      "external_search_triggers": 0
+    }
+  }
+}
